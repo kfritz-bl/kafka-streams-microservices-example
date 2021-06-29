@@ -2,6 +2,7 @@
 
 ## Endpoint
 - http://localhost:8080/domain/lookup/facebook - to pull all facebook related web domain names
+- http://localhost:8080/domain - to view a JSON object containing all related web domain names
 
 ## Microservices
 - 'domain-crawler' - uses Spring Kafka
