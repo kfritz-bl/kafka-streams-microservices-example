@@ -16,14 +16,15 @@ docker-compose up -d
 ```
 The above command starts Confluent Platform with separate containers for all Confluent Platform components. Your output should resemble the following:
 ```shell
-Creating network "cp-all-in-one-community_default" with the default driver
+Creating network "kafka-streams-microservices-example_default" with the default driver
+...
 Creating zookeeper ... done
 Creating broker    ... done
 Creating schema-registry ... done
-Creating rest-proxy      ... done
 Creating connect         ... done
-Creating ksql-datagen    ... done
+Creating rest-proxy      ... done
 Creating ksqldb-server   ... done
+Creating ksql-datagen    ... done
 Creating ksqldb-cli      ... done
 ```
 3. Verify that the services are up and running:
@@ -32,19 +33,18 @@ docker-compose ps
 ```
 You should see the following:
 ```shell
-     Name                    Command               State                Ports
-------------------------------------------------------------------------------------------
-broker            /etc/confluent/docker/run        Up      0.0.0.0:29092->29092/tcp,
-0.0.0.0:9092->9092/tcp
-connect           /etc/confluent/docker/run        Up      0.0.0.0:8083->8083/tcp,
-9092/tcp
-ksqldb-cli        ksql http://localhost:8088       Up
+     Name                    Command                  State                           Ports                     
+------------------------------------------------------------------------------------------------------------------------------
+broker            /etc/confluent/docker/run        Up             0.0.0.0:29092->29092/tcp,:::29092->29092/tcp,
+                                                                  0.0.0.0:9092->9092/tcp,:::9092->9092/tcp,
+                                                                  0.0.0.0:9101->9101/tcp,:::9101->9101/tcp
+connect           /etc/confluent/docker/run        Up (healthy)   0.0.0.0:8083->8083/tcp,:::8083->8083/tcp, 9092/tcp
 ksql-datagen      bash -c echo Waiting for K ...   Up
-ksqldb-server     /etc/confluent/docker/run        Up      0.0.0.0:8088->8088/tcp
-rest-proxy        /etc/confluent/docker/run        Up      0.0.0.0:8082->8082/tcp
-schema-registry   /etc/confluent/docker/run        Up      0.0.0.0:8081->8081/tcp
-zookeeper         /etc/confluent/docker/run        Up      0.0.0.0:2181->2181/tcp,
-2888/tcp, 3888/tcp
+ksqldb-cli        /bin/sh                          Up
+ksqldb-server     /etc/confluent/docker/run        Up             0.0.0.0:8088->8088/tcp,:::8088->8088/tcp
+rest-proxy        /etc/confluent/docker/run        Up             0.0.0.0:8082->8082/tcp,:::8082->8082/tcp
+schema-registry   /etc/confluent/docker/run        Up             0.0.0.0:8081->8081/tcp,:::8081->8081/tcp
+zookeeper         /etc/confluent/docker/run        Up             0.0.0.0:2181->2181/tcp,:::2181->2181/tcp, 2888/tcp, 3888/tcp
 ```
 If the state is not Up, rerun the docker-compose up -d command.
 

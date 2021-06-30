@@ -22,6 +22,8 @@ public class DomainCrawlerService {
 
     public void crawl(String name) {
 
+        clearDomains();
+
         Mono<DomainList> domainListMono = WebClient.create()
                 .get()
                 .uri("https://api.domainsdb.info/v1/domains/search?domain=" + name + "&zone=com")
@@ -37,7 +39,30 @@ public class DomainCrawlerService {
                 }));
     }
 
+    public void crawl(String name, String zone) {
+
+        clearDomains();
+
+        Mono<DomainList> domainListMono = WebClient.create()
+                .get()
+                .uri("https://api.domainsdb.info/v1/domains/search?domain=" + name + "&zone=" + zone)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(DomainList.class);
+
+        domainListMono.subscribe(domainList -> domainList.domains
+                .forEach(domain -> {
+                    kafkaTemplate.send(KAFKA_TOPIC, domain);
+                    domainListCap.add(domain);
+                    System.out.println("Domain message: " + domain.getDomain());
+                }));
+    }
+
     public List<Domain> getDomains() {
         return domainListCap;
+    }
+
+    private void clearDomains() {
+        domainListCap.clear();
     }
 }

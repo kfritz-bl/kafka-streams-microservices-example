@@ -27,4 +27,10 @@ public class DomainCrawlerController {
         domainCrawlerService.crawl(name);
         return "Domain crawler has scrapped your data";
     }
+
+    @GetMapping("/lookup/{name}/{zone}")
+    public String lookup(@PathVariable("name") final String name, @PathVariable("zone") final String zone) {
+        domainCrawlerService.crawl(name, zone);
+        return "Domain crawler has scrapped your data";
+    }
 }
