@@ -8,7 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DomainList {
-
-    List<Domain> domains;
-
+	
+	List<Domain> domains;
+	
 }
